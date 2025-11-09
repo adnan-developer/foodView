@@ -1,0 +1,17 @@
+# Ignore compiled output
+*.o
+*.out
+
+# Ignore log files
+*.log
+
+# Ignore editor-specific files
+.vscode/
+.idea/
+
+# Ignore node modules
+node_modules/
+
+# Ignore sensitive configuration files
+config.ini
+.env
