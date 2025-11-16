@@ -4,7 +4,8 @@ const jwt = require("jsonwebtoken");
 
 const registerFoodPartner = async (req, res) => {
   try {
-    const { fullName, email, password } = req.body;
+    const { businessName, contactName, phone, email, password, address } =
+      req.body;
 
     const isUserAlreadyExists = await foodPartnerModel.findOne({ email });
 
@@ -16,9 +17,12 @@ const registerFoodPartner = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const foodPartner = await foodPartnerModel.create({
-      fullName,
+      businessName,
+      contactName,
+      phone,
       email,
       password: hashedPassword,
+      address,
     });
 
     const token = jwt.sign({ id: foodPartner._id }, process.env.JWT_SECRET);
@@ -27,11 +31,15 @@ const registerFoodPartner = async (req, res) => {
     return res.status(201).json({
       message: "Food Partner Account Registeres Successfully",
       foodPartner: {
-        fullName,
+        businessName,
+        contactName,
+        phone,
         email,
+        address,
       },
     });
   } catch (err) {
+    console.log(err);
     return res.status(500).json({ message: "Server error" });
   }
 };
@@ -55,13 +63,13 @@ const loginFoodPartner = async (req, res) => {
     return res.status(200).json({
       message: "Food Partner Logged In Successfully",
       foodPartner: {
-        fullName : foodPartner.fullName,
-        email : foodPartner.email,
+        fullName: foodPartner.fullName,
+        email: foodPartner.email,
       },
-    }); 
+    });
   } catch (err) {
-    console.log(err)
-    return res.status(500).json({ message: "Server error",err });
+    console.log(err);
+    return res.status(500).json({ message: "Server error", err });
   }
 };
 
